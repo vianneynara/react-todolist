@@ -13,11 +13,6 @@ class TodoApiService {
     this.api = axios.create({
       baseURL: 'http://localhost:8081/api/v1'
     });
-
-    this.api.interceptors.response.use(res => {
-      console.log(res.request._header)
-      return res;
-    }, error => Promise.reject(error));
   }
 
   // Authentication endpoints

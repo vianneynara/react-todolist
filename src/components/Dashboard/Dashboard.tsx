@@ -64,6 +64,11 @@ export default function Dashboard() {
     }
   };
 
+  const dateOnChange = () => {
+    const dateField = document.getElementById('formDeadline') as HTMLInputElement
+    dateField.value = (document.getElementById('formDeadline') as HTMLInputElement).value;
+  }
+
   useEffect(() => {
     refreshTasks();
   }, []);
@@ -85,31 +90,27 @@ export default function Dashboard() {
       <h2 className="font-bold text-2xl">My tasks</h2>
 
       <div className="flex flex-row justify-between w-[720px] my-4">
-        <input type="text" id="formTitle" placeholder="Task title" className="rounded-md px-2 flex-1" />
-        <input type="date" id="formDeadline" value={getCurrentDate()} className="rounded-md mx-2 px-2 w-[130px]" />
+        <input type="text" id="formTitle" placeholder="Task title" className="rounded-md px-2 flex-1"/>
+        <input type="date" id="formDeadline" value={getCurrentDate()} onChange={dateOnChange}
+               className="rounded-md mx-2 px-2 w-[130px]"/>
         <button onClick={() => handleCreate()}>Create</button>
       </div>
 
-      <table width="720px">
-        <thead>
-        </thead>
-        <tbody >
+      <div className="w-[720px]">
         {tasks.map((task, i) => (
-          <div className="flex flex-col justify-center rounded-md bg-purple-500 my-2 py-1">
-            <div key={task.taskId}>
-              <div className="flex flex-row justify-between items-center">
-                <div className="bg-purple-600 rounded-md mx-1 py-1 px-2 font-bold">{i + 1}</div>
-                <div className="bg-purple-600 rounded-md mx-1 py-1 px-2 font-bold flex-1">{task.title}</div>
-                <div className="bg-purple-600 rounded-md ml-1 py-1 ps-2 pe-1 font-bold w-[130px]">{task.deadline.toString()}</div>
-                  <button className="mx-1">
-                    <a onClick={() => handleDelete(task.taskId)}>Delete</a>
-                  </button>
-              </div>
+          <div key={task.taskId} className="flex flex-col justify-center rounded-md bg-purple-500 my-2 py-1">
+            <div className="flex flex-row justify-between items-center">
+              <div className="bg-purple-600 rounded-md mx-1 py-1 px-2 font-bold">{i + 1}</div>
+              <div className="bg-purple-600 rounded-md mx-1 py-1 px-2 font-bold flex-1">{task.title}</div>
+              <div
+                className="bg-purple-600 rounded-md ml-1 py-1 ps-2 pe-1 font-bold w-[130px]">{task.deadline.toString()}</div>
+              <button className="mx-1">
+                <a onClick={() => handleDelete(task.taskId)}>Delete</a>
+              </button>
             </div>
           </div>
         ))}
-        </tbody>
-      </table>
+      </div>
     </>
   );
 }
