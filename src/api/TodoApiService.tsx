@@ -41,9 +41,8 @@ class TodoApiService {
 
   async getUserTasks(token: string, username: string): Promise<AxiosResponse> {
     try {
-      return this.api.get(`/accounts/${username}/tasks`, {
-        headers: {Authorization: `${token}`}
-      });
+      return this.api.get(`/accounts/${username}/tasks`,
+        {headers: {Authorization: `${token}`}});
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) return error.response;
       else throw error;
@@ -63,11 +62,24 @@ class TodoApiService {
     }
   }
 
+  async toggleCompleteTask(token: string, username: string, taskId: number): Promise<AxiosResponse> {
+    try {
+      return await this.api.patch(`/accounts/${username}/tasks/${taskId}/toggle-completion`,
+        {},
+        {headers: {Authorization: `${token}`}}
+      );
+    } catch (error) {
+      console.error(error);
+      if (axios.isAxiosError(error) && error.response) return error.response;
+      else throw error;
+    }
+  }
+
   async updateTask(token: string, username: string, taskId: number, task: TaskInterface): Promise<AxiosResponse> {
     return await this.api.put(`/accounts/${username}/tasks/${taskId}`,
       {task},
-      {headers: {Authorization: `${token}`}
-    });
+      {headers: {Authorization: `${token}`}}
+    );
   }
 
   async deleteTask(token: string, username: string, taskId: number): Promise<AxiosResponse> {
@@ -76,12 +88,12 @@ class TodoApiService {
     });
   }
 
-  dateToString (date: Date) {
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      return `${year}/${month}/${day}`;
-    }
+  dateToString(date: Date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  }
 }
 
 export const todoApiService = new TodoApiService();
