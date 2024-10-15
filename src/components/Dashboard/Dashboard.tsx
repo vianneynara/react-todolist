@@ -1,14 +1,17 @@
-import {todoApiService} from "../../api/TodoApiService.tsx";
-import {useEffect, useState} from "react";
-import {Task} from "../../model/TaskModel.tsx";
-import {useAuth} from "../../auth/AuthContext.tsx";
+import { useEffect, useState } from "react";
+import { todoApiService } from "../../api/TodoApiService";
+import { Task } from "../../model/TaskModel";
+import { useAuth } from "../../auth/AuthContext";
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  const {username, token, logout} = useAuth();
+  const { username, token, logout } = useAuth();
 
-  document.title = "Dashboard";
+  useEffect(() => {
+    document.title = "Dashboard";
+    refreshTasks();
+  }, []);
 
   const refreshTasks = async () => {
     try {
@@ -19,21 +22,19 @@ export default function Dashboard() {
     }
   };
 
-  const getCurrentDate = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
   const handleCreate = async () => {
     const title = (document.getElementById('formTitle') as HTMLInputElement).value;
     if (title === '') {
       console.error("Title is required");
       return;
     }
-    const deadline = (new Date((document.getElementById('formDeadline') as HTMLInputElement).value));
+
+    const deadlineField = document.getElementById('formDeadline') as HTMLInputElement;
+    let deadline = new Date((document.getElementById('formDeadline') as HTMLInputElement).value);
+    if (deadlineField.value === '') {
+      deadline = new Date(Date.now());
+    }
+
 
     try {
       const response = await todoApiService.createTask(token, username, title, deadline);
@@ -44,8 +45,6 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      // window.location.reload();
     }
   }
 
@@ -59,28 +58,23 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      window.location.reload();
     }
   };
 
-  const dateOnChange = () => {
-    const dateField = document.getElementById('formDeadline') as HTMLInputElement
-    dateField.value = (document.getElementById('formDeadline') as HTMLInputElement).value;
+  const handleLogout = () => {
+    setTasks([]);
+    logout();
+    window.location.reload();
   }
 
-  useEffect(() => {
-    refreshTasks();
-  }, []);
-
   return (
-    <>
-      <div className="flex flex-row justify-between w-[720px] mt-1">
+    <div className="w-[720px] mb-4">
+      <div className="flex flex-row justify-between mt-1">
         <div className="flex flex-row">
           <div>
             Welcome, <span className="font-bold">{username}</span>!
           </div>
-          <a className="ps-2" onClick={logout}>
+          <a className="ps-2" onClick={handleLogout}>
             Logout
           </a>
         </div>
@@ -89,14 +83,13 @@ export default function Dashboard() {
 
       <h2 className="font-bold text-2xl">My tasks</h2>
 
-      <div className="flex flex-row justify-between w-[720px] my-4">
+      <div className="flex flex-row justify-between my-4">
         <input type="text" id="formTitle" placeholder="Task title" className="rounded-md px-2 flex-1"/>
-        <input type="date" id="formDeadline" value={getCurrentDate()} onChange={dateOnChange}
-               className="rounded-md mx-2 px-2 w-[130px]"/>
+        <input type="date" id="formDeadline" className="rounded-md mx-2 px-2 w-[130px]"/>
         <button onClick={() => handleCreate()}>Create</button>
       </div>
 
-      <div className="w-[720px]">
+      <div>
         {tasks.map((task, i) => (
           <div key={task.taskId} className="flex flex-col justify-center rounded-md bg-purple-500 my-2 py-1">
             <div className="flex flex-row justify-between items-center">
@@ -111,6 +104,6 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 }
