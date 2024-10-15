@@ -98,7 +98,7 @@ export default function Dashboard() {
       <div className="flex flex-row justify-between my-4">
         <input type="text" id="formTitle" placeholder="Task title" className="rounded-md px-2 flex-1"/>
         <input type="date" id="formDeadline" className="rounded-md mx-2 px-2 w-[130px]"/>
-        <button onClick={handleCreate} className="hover:bg-purple-400 hover:text-black transition duration-500 ease-in-out">Create</button>
+        <button onClick={handleCreate} className="hover:bg-purple-400 hover:text-black transition duration-300 ease-in-out">Create</button>
       </div>
 
       <div>
@@ -112,13 +112,13 @@ export default function Dashboard() {
               </div>
               <button 
                 onClick={() => handleToggleCompletion(task.taskId)}
-                className={`rounded-md mx-1 py-1 px-2 font-bold w-[80px] ${
+                className={`rounded-md mx-1 py-1 px-2 font-bold hover:bg-orange-500 transition duration-300 ease-in-out w-[80px] ${
                   task.isCompleted ? 'bg-green-500 text-white' : 'bg-yellow-500 text-white'
                 }`}
               >
                 {task.isCompleted ? 'Done' : 'Pending'}
               </button>
-              <button className="mx-1 bg-red-500 font-bold" onClick={() => handleDelete(task.taskId)}>Delete</button>
+              <button className="mx-1 bg-red-500 font-bold hover:bg-red-700 transition duration-300 ease-in-out" onClick={() => handleDelete(task.taskId)}>Delete</button>
             </div>
           </div>
         ))}
