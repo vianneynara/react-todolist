@@ -8,19 +8,14 @@ import { AuthProvider } from "./auth/AuthContext.tsx";
 import { ProtectedRoute } from "./routes/ProtectedRoute.tsx";
 
 const App: React.FC = () => {
-  // username state
-  const [username, setUsername] = React.useState(() => {
-    return localStorage.getItem('username') || '';
-  });
-
   return (
     <AuthProvider>
       <div className="min-h-screen flex flex-col">
         <header className="w-full bg-purple-500 flex flex-row justify-between">
-          <span className="text-white text-2xl font-bold p-4">Todo App</span>
-          <span className="text-white text-2xl font-bold p-4">225314091</span>
+          <a className="text-white text-2xl font-bold p-2 hover:text-purple-300" target={"_self"} href={"/"}>Todo App</a>
+          <span className="text-white text-2xl font-bold p-2">225314091</span>
         </header>
-        <main className="flex-grow flex flex-col items-center ">
+        <main className="flex-grow flex flex-col items-center">
           <Router>
             <Routes>
               <Route path="/" element={
@@ -35,19 +30,19 @@ const App: React.FC = () => {
               }/>
               <Route path="/register" element={
                 <ProtectedRoute requireAuth={false}>
-                  <RegisterForm setUsername={setUsername}/>
+                  <RegisterForm />
                 </ProtectedRoute>
               }/>
               <Route path="/dashboard" element={
                 <ProtectedRoute requireAuth={true}>
-                  <Dashboard username={username}/>
+                  <Dashboard />
                 </ProtectedRoute>
               }/>
               <Route path="*" element={<NotFoundPage/>}/>
             </Routes>
           </Router>
         </main>
-        <footer className="w-full bg-purple-500 text-white py-4">
+        <footer className="w-full bg-purple-500 text-white py-2">
           <div className="text-center">
             <span className="text-green-400 font-bold">http://localhost:5173</span>
             <span> (front-end) connected to (back-end) </span>
