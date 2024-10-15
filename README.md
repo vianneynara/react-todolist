@@ -1,50 +1,58 @@
-# React + TypeScript + Vite
+# Todo List React Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Simple Todo List Web App using React TypeScript.
 
-Currently, two official plugins are available:
+## Main Repository
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project is applied as the providing server of my [Todo Web App](https://github.com/vianneynara/todo-web-app) project.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- [ ] Login/Register
+  - [x] Register a new user.
+  - [x] Login a user.
+  - [x] Logout a user.
+  - [x] Error handlers.
+- [x] Tasks dashboard
+  - [x] Get user tasks.
+  - [x] Create a new task.
+  - [x] Update a task completion.
+  - [x] Delete a task.
+  - [x] Error handlers.
 
-- Configure the top-level `parserOptions` property like this:
+## Prerequisites
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- Connected to [this API project](https://github.com/vianneynara/spring-todolist-api)
+- Node.js
+- NPM
+
+## Installing and running application
+
+Default configurations:
+- Port: 5173
+- Base API URL: http://localhost:8081/api/v1
+
+1. Clone the repository
+```shell
+git clone https://github.com/vianneynara/react-todolist
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Navigate to the project's folder
+```shell
+cd react-todolist
+```
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+3. Install dependencies
+```shell
+npm install
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+4. Run the application
+```shell
+npm start
+```
+
+5. Access the application
+```shell
+http://localhost:5173
 ```
