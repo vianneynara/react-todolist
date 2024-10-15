@@ -24,10 +24,12 @@ export default function LoginForm() {
       console.log(response);
 
       if (response.status === 200) {
-        login(formUsername, response.data.token);
         setLoginMessage('Login successful! Redirecting...');
-        setTimeout(() => window.location.reload(), 2000);
-      } else if (response.status === 404) {
+        setTimeout(() => {
+          window.location.reload();
+        login(formUsername, response.data.token);
+        }, 2000);
+      } else if (response.status === 409) {
         setLoginMessage('Invalid credentials.');
       } else {
         setLoginMessage('An unexpected error occurred. Please try again.');

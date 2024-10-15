@@ -8,7 +8,7 @@ export default function RegisterForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registerMessage, setRegisterMessage] = useState('');
 
-  const { login } = useAuth();
+  const {login} = useAuth();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -19,9 +19,11 @@ export default function RegisterForm() {
       const response = await todoApiService.register(formUsername, password);
 
       if (response.status === 201) {
-        login(formUsername, response.data.token);
         setRegisterMessage('Register successful! Logging in...');
-        setTimeout(() => window.location.reload(), 2000);
+        setTimeout(() => {
+          window.location.reload();
+          login(formUsername, response.data.token);
+        }, 2000);
       } else if (response.status === 409) {
         setRegisterMessage('Username already exists.');
       } else {
