@@ -1,40 +1,35 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {todoApiService} from "../../api/TodoApiService.tsx";
 import {useAuth} from "../../auth/AuthContext.tsx";
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const [formUsername, setFormUsername] = useState('');
-  const [formPassword, setFormPassword] = useState('');
+  const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loginMessage, setLoginMessage] = useState('');
-
-  useEffect(() => {
-    document.title = "Login Page";
-  }, []);
+  const [registerMessage, setRegisterMessage] = useState('');
 
   const { login } = useAuth();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsSubmitting(true);
-    setLoginMessage('');
+    setRegisterMessage('');
 
     try {
-      const response = await todoApiService.login(formUsername, formPassword);
-      console.log(response);
+      const response = await todoApiService.register(formUsername, password);
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         login(formUsername, response.data.token);
-        setLoginMessage('Login successful! Redirecting...');
+        setRegisterMessage('Register successful! Logging in...');
         setTimeout(() => window.location.reload(), 2000);
-      } else if (response.status === 404) {
-        setLoginMessage('Invalid credentials.');
+      } else if (response.status === 409) {
+        setRegisterMessage('Username already exists.');
       } else {
-        setLoginMessage('An unexpected error occurred. Please try again.');
+        setRegisterMessage('An unexpected error occurred. Please try again.');
       }
     } catch (error) {
       console.error(error);
-      setLoginMessage('An error from the server has occurred.');
+      setRegisterMessage('An error from the server has occurred.');
     } finally {
       setIsSubmitting(false);
     }
@@ -42,7 +37,7 @@ export default function LoginForm() {
 
   return (
     <div className="m-4 max-w-sm">
-      <span className={"font-bold"}>Log into existing account</span>
+      <span className={"font-bold"}>Register a new account</span>
       <form onSubmit={handleSubmit}>
         <div className="py-2 flex items-center">
           <label className="w-24">Username</label>
@@ -50,7 +45,6 @@ export default function LoginForm() {
             type="text"
             value={formUsername}
             onChange={event => setFormUsername(event.target.value)}
-            autoComplete={"username"}
             required={true}
             className="flex-1"
           />
@@ -59,25 +53,25 @@ export default function LoginForm() {
           <label className="w-24">Password</label>
           <input
             type="password"
-            value={formPassword}
+            value={password}
             autoComplete={"current-password"}
-            onChange={event => setFormPassword(event.target.value)}
+            onChange={event => setPassword(event.target.value)}
             required={true}
             className="flex-1"
           />
         </div>
         <div className="py-2 mt-auto flex flex-row justify-between items-center">
-          <a target={"_self"} href={"/register"}>Register</a>
+          <a target={"_self"} href={"/login"}>Login</a>
           <button type="submit" disabled={isSubmitting}>
-            Login
+            Register
           </button>
         </div>
       </form>
       <div className="flex flex-row justify-center">
-        {loginMessage && (
+        {registerMessage && (
           <div
-            className={`p-2 text-sm ${loginMessage.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
-            {loginMessage}
+            className={`p-2 text-sm ${registerMessage.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
+            {registerMessage}
           </div>
         )}
       </div>
