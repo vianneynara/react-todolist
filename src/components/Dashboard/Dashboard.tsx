@@ -15,7 +15,7 @@ export default function Dashboard() {
   const refreshTasks = async () => {
     try {
       const response = await todoApiService.getUserTasks(token, username);
-      setTasks(response.data.data);
+      setTasks(response.data.tasks);
       console.log(tasks);
     } catch (error) {
       console.error(error);
