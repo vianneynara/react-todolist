@@ -16,6 +16,7 @@ export default function Dashboard() {
     try {
       const response = await todoApiService.getUserTasks(token, username);
       setTasks(response.data.data);
+      console.log(tasks);
     } catch (error) {
       console.error(error);
     }
@@ -62,7 +63,7 @@ export default function Dashboard() {
       if (response.status === 204) {
         setTasks(tasks.map(task => 
           task.taskId === taskId 
-            ? { ...task, isCompleted: !task.isCompleted } 
+            ? { ...task, completed: !task.completed }
             : task
         ));
       } else {
@@ -113,10 +114,10 @@ export default function Dashboard() {
               <button 
                 onClick={() => handleToggleCompletion(task.taskId)}
                 className={`rounded-md mx-1 py-1 px-2 font-bold hover:bg-orange-500 transition duration-300 ease-in-out w-[80px] ${
-                  task.isCompleted ? 'bg-green-500 text-white' : 'bg-yellow-500 text-white'
+                  task.completed ? 'bg-green-500 text-white' : 'bg-yellow-500 text-white'
                 }`}
               >
-                {task.isCompleted ? 'Done' : 'Pending'}
+                {task.completed ? 'Done' : 'Pending'}
               </button>
               <button className="mx-1 bg-red-500 font-bold hover:bg-red-700 transition duration-300 ease-in-out" onClick={() => handleDelete(task.taskId)}>Delete</button>
             </div>
