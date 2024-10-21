@@ -12,7 +12,7 @@ export default function LoginForm() {
     document.title = "Login Page";
   }, []);
 
-  const { login } = useAuth();
+  const {login} = useAuth();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -25,11 +25,8 @@ export default function LoginForm() {
 
       if (response.status === 200) {
         setLoginMessage('Login successful! Redirecting...');
-        setTimeout(() => {
-          window.location.reload();
         login(formUsername, response.data.token);
-        }, 2000);
-      } else if (response.status === 409) {
+      } else if (response.status === 404) {
         setLoginMessage('Invalid credentials.');
       } else {
         setLoginMessage('An unexpected error occurred. Please try again.');

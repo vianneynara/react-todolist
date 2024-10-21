@@ -17,13 +17,11 @@ export default function RegisterForm() {
 
     try {
       const response = await todoApiService.register(formUsername, password);
+      console.log(response.data);
 
       if (response.status === 201) {
         setRegisterMessage('Register successful! Logging in...');
-        setTimeout(() => {
-          window.location.reload();
-          login(formUsername, response.data.token);
-        }, 2000);
+        login(response.data.username, 'Bearer ' + response.data.accountId);
       } else if (response.status === 409) {
         setRegisterMessage('Username already exists.');
       } else {
