@@ -19,73 +19,77 @@ class TodoApiService {
 
   /* Login API function to return the token of an account */
   async login(username: string, password: string): Promise<AxiosResponse> {
-    try {
-      return await this.api.post('/request-token', {username, password});
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) return error.response;
-      else throw error;
-    }
+    return this.api.post('/request-token', {username, password})
+      .catch(error => {
+        if (axios.isAxiosError(error) && error.response) return error.response;
+        throw error;
+      });
   }
 
   /* Register API function to create new account return the token of an account */
   async register(username: string, password: string): Promise<AxiosResponse> {
-    try {
-      return await this.api.post('/accounts', {username, password});
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) return error.response;
-      else throw error;
-    }
+    return this.api.post('/accounts', {username, password})
+      .catch(error => {
+        if (axios.isAxiosError(error) && error.response) return error.response;
+        throw error;
+      });
   }
 
-  // Task endpoints
+// Task endpoints
 
   async getUserTasks(token: string, username: string): Promise<AxiosResponse> {
-    try {
-      return this.api.get(`/accounts/${username}/tasks`,
-        {headers: {Authorization: `${token}`}});
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) return error.response;
-      else throw error;
-    }
+    return this.api.get(`/accounts/${username}/tasks`, {
+      headers: {Authorization: `${token}`}
+    })
+      .catch(error => {
+        if (axios.isAxiosError(error) && error.response) return error.response;
+        throw error;
+      });
   }
 
   async createTask(token: string, username: string, title: string, deadline: Date): Promise<AxiosResponse> {
-    try {
-      return await this.api.post(`/accounts/${username}/tasks`,
-        {title, deadline: this.dateToString(deadline)},
-        {headers: {Authorization: `${token}`}}
-      );
-    } catch (error) {
-      console.error(error);
-      if (axios.isAxiosError(error) && error.response) return error.response;
-      else throw error;
-    }
+    return this.api.post(`/accounts/${username}/tasks`,
+      {title, deadline: this.dateToString(deadline)},
+      {headers: {Authorization: `${token}`}}
+    )
+      .catch(error => {
+        console.error(error);
+        if (axios.isAxiosError(error) && error.response) return error.response;
+        throw error;
+      });
   }
 
   async toggleCompleteTask(token: string, username: string, taskId: number): Promise<AxiosResponse> {
-    try {
-      return await this.api.patch(`/accounts/${username}/tasks/${taskId}/toggle-completion`,
-        {},
-        {headers: {Authorization: `${token}`}}
-      );
-    } catch (error) {
-      console.error(error);
-      if (axios.isAxiosError(error) && error.response) return error.response;
-      else throw error;
-    }
+    return this.api.patch(`/accounts/${username}/tasks/${taskId}/toggle-completion`,
+      {},
+      {headers: {Authorization: `${token}`}}
+    )
+      .catch(error => {
+        console.error(error);
+        if (axios.isAxiosError(error) && error.response) return error.response;
+        throw error;
+      });
   }
 
   async updateTask(token: string, username: string, taskId: number, task: TaskInterface): Promise<AxiosResponse> {
-    return await this.api.put(`/accounts/${username}/tasks/${taskId}`,
+    return this.api.put(`/accounts/${username}/tasks/${taskId}`,
       {task},
       {headers: {Authorization: `${token}`}}
-    );
+    )
+      .catch(error => {
+        if (axios.isAxiosError(error) && error.response) return error.response;
+        throw error;
+      });
   }
 
   async deleteTask(token: string, username: string, taskId: number): Promise<AxiosResponse> {
-    return await this.api.delete(`/accounts/${username}/tasks/${taskId}`, {
+    return this.api.delete(`/accounts/${username}/tasks/${taskId}`, {
       headers: {Authorization: `${token}`}
-    });
+    })
+      .catch(error => {
+        if (axios.isAxiosError(error) && error.response) return error.response;
+        throw error;
+      });
   }
 
   dateToString(date: Date) {
